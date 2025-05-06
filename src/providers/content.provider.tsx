@@ -1,9 +1,7 @@
 "use client";
 
 import { Flex, theme } from "antd";
-
 import type { FC, PropsWithChildren } from "react";
-import { HeaderLayout } from "../components/layout/header.layout";
 import dynamic from "next/dynamic";
 
 const ContentLayout = dynamic(
@@ -29,9 +27,10 @@ export const ContentProvider: FC<PropsWithChildren<IProps>> = (props) => {
     <Flex
       vertical
       style={{
-        height: "100%",
         gap: token.marginSM,
         padding: token.paddingSM,
+        height: "100%",
+        minHeight: "calc(100vh - 140px)", // Match ContentLayout height
       }}
     >
       <ContentLayout>{props.children}</ContentLayout>

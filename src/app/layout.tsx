@@ -5,7 +5,7 @@ import "@ant-design/v5-patch-for-react-19";
 import { ThemeProvider } from "@/src/providers/theme.provider";
 import { LoadingProvider } from "@/src/providers/loading.provider";
 import { HeaderComponent } from "@/src/components/header/header.component";
-import { Layout } from "antd";
+import { Layout, Flex } from "antd";
 
 const { Content } = Layout;
 
@@ -19,17 +19,20 @@ export default function RootLayout({
       <body>
         <LoadingProvider>
           <ThemeProvider>
-            <Layout style={{ minHeight: "100vh" }}>
+            <Layout>
               <HeaderComponent />
-              <Content
-                style={{
-                  marginTop: 64,
-                  padding: "24px",
-                  height: "calc(100vh - 64px)",
-                }}
-              >
-                {children}
-              </Content>
+              <Flex justify="center">
+                <Content
+                  style={{
+                    marginTop: 100,
+                    padding: "0 24px",
+                    width: "100%",
+                    maxWidth: "1200px",
+                  }}
+                >
+                  {children}
+                </Content>
+              </Flex>
             </Layout>
           </ThemeProvider>
         </LoadingProvider>

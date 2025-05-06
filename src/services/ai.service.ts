@@ -3,6 +3,7 @@ import { apiConfig } from "../config/api.config";
 
 const openai = new OpenAI({
 	apiKey: apiConfig.openai.apiKey,
+	dangerouslyAllowBrowser: true,
 });
 
 const completion = openai.chat.completions.create({
@@ -12,11 +13,6 @@ const completion = openai.chat.completions.create({
 });
 
 completion.then((result) => console.log(result.choices[0].message));
-
-// const openai = new OpenAI({
-// 	apiKey: apiConfig.openai.apiKey,
-// 	dangerouslyAllowBrowser: true,
-// });
 
 export interface ChatMessage {
 	role: "user" | "assistant" | "system";

@@ -1,10 +1,13 @@
 "use client";
 
-import { Button, Flex, Input } from "antd";
+import { Button, Flex, Input, theme } from "antd";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useTheme } from "@/src/providers/theme.provider";
+import { SendOutlined } from "@ant-design/icons";
 
 interface Message {
+  id: string;
   text: string;
   sender: "user" | "bot";
 }
@@ -12,13 +15,19 @@ interface Message {
 const ChatComponent = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const { isDarkMode } = useTheme();
+  const { useToken } = theme;
+  const { token } = useToken();
 
   const handleSend = (
     e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     e.preventDefault();
     if (message.trim()) {
-      setMessages((prev) => [...prev, { text: message, sender: "user" }]);
+      setMessages((prev) => [
+        ...prev,
+        { id: uuidv4(), text: message, sender: "user" },
+      ]);
       setMessage("");
       // TODO: Add bot response logic here
     }
@@ -30,12 +39,17 @@ const ChatComponent = () => {
     }
   };
 
+  const backgroundColor = isDarkMode ? token.colorBgContainer : "#f5f5f5";
+
   return (
     <Flex
       vertical
       style={{
+        height: "100%",
+        backgroundColor,
+        borderRadius: token.borderRadius,
+        overflow: "hidden",
         position: "relative",
-        backgroundColor: "#f5f5f5",
       }}
     >
       <Flex
@@ -44,12 +58,12 @@ const ChatComponent = () => {
           padding: "20px",
           overflowY: "auto",
           flexGrow: 1,
-          marginBottom: "80px",
+          paddingBottom: "100px",
         }}
       >
         {messages.map((msg) => (
           <Flex
-            key={uuidv4()}
+            key={msg.id}
             justify={msg.sender === "user" ? "flex-end" : "flex-start"}
             style={{ marginBottom: "12px" }}
           >
@@ -57,10 +71,18 @@ const ChatComponent = () => {
               style={{
                 maxWidth: "70%",
                 padding: "12px 16px",
-                borderRadius: "16px",
-                backgroundColor: msg.sender === "user" ? "#1677ff" : "#fff",
-                color: msg.sender === "user" ? "#fff" : "#000",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                borderRadius: token.borderRadiusLG,
+                backgroundColor:
+                  msg.sender === "user"
+                    ? token.colorPrimary
+                    : isDarkMode
+                    ? token.colorBgElevated
+                    : token.colorBgContainer,
+                color:
+                  msg.sender === "user"
+                    ? token.colorTextLightSolid
+                    : token.colorText,
+                boxShadow: token.boxShadow,
               }}
             >
               {msg.text}
@@ -71,27 +93,61 @@ const ChatComponent = () => {
 
       <Flex
         style={{
-          position: "fixed",
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          padding: "16px",
-          backgroundColor: "#fff",
-          boxShadow: "0 -2px 10px rgba(0,0,0,0.1)",
+          padding: "20px",
+          background: `linear-gradient(180deg, transparent, ${backgroundColor} 20%)`,
         }}
-        gap={12}
       >
-        <Input.TextArea
-          placeholder="Ask away my friend!"
-          autoSize={{ minRows: 1, maxRows: 4 }}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onPressEnter={handleKeyPress}
-          style={{ flexGrow: 1 }}
-        />
-        <Button type="primary" onClick={handleSend}>
-          Send
-        </Button>
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            backgroundColor,
+            borderRadius: token.borderRadiusLG,
+            boxShadow: token.boxShadowTertiary,
+          }}
+        >
+          <Input.TextArea
+            placeholder="Ask away my friend!"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onPressEnter={handleKeyPress}
+            size="large"
+            autoSize={false}
+            rows={1}
+            style={{
+              paddingRight: "60px",
+              border: "none",
+              backgroundColor: "transparent",
+              resize: "none",
+              height: "50px",
+              overflow: "auto",
+            }}
+          />
+          <Button
+            type="primary"
+            onClick={handleSend}
+            icon={
+              <SendOutlined color={isDarkMode ? token.colorText : "black"} />
+            }
+            style={{
+              position: "absolute",
+              right: "8px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+            }}
+          />
+        </div>
       </Flex>
     </Flex>
   );

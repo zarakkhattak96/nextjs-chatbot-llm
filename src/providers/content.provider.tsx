@@ -34,11 +34,6 @@ export const ContentProvider: FC<PropsWithChildren<IProps>> = (props) => {
         padding: token.paddingSM,
       }}
     >
-      <HeaderLayout
-        title={props.title}
-        handleBack={props.handleBack}
-        isBack={props.isBack}
-      />
       <ContentLayout>{props.children}</ContentLayout>
     </Flex>
   );

@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Flex, Typography } from "antd";
 import Link from "next/link";
+import { useMemo } from "react";
 
 interface Quote {
   q: string;
@@ -19,13 +20,16 @@ interface Quote {
 interface ChatPlaceholderComponentProps {
   initialQuotes: Quote[];
 }
+
 export const ChatPlaceholderComponent = ({
   initialQuotes,
 }: ChatPlaceholderComponentProps) => {
   const { Text, Title } = Typography;
 
-  const randomQuote =
-    initialQuotes[Math.floor(Math.random() * initialQuotes?.length)];
+  const randomQuote = useMemo(
+    () => initialQuotes[Math.floor(Math.random() * initialQuotes?.length)],
+    [initialQuotes]
+  );
 
   return (
     <>
@@ -36,7 +40,7 @@ export const ChatPlaceholderComponent = ({
       <Flex vertical justify="center" align="center">
         <Flex align="center" gap={8}>
           <BulbOutlined style={{ fontSize: 24 }} />
-          <Text>{randomQuote.q}</Text>
+          <Text>{randomQuote?.q}</Text>
         </Flex>
       </Flex>
 

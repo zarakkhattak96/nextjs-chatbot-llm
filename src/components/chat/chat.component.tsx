@@ -5,6 +5,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useTheme } from "@/src/providers/theme.provider";
 import { SendOutlined } from "@ant-design/icons";
+import { ChatPlaceholderComponent } from "./chatPlaceholder.component";
 
 interface Message {
   id: string;
@@ -12,7 +13,18 @@ interface Message {
   sender: "user" | "bot";
 }
 
-const ChatComponent = () => {
+interface Quote {
+  q: string;
+  a: string;
+  c: string;
+  h: string;
+}
+
+interface ChatComponentProps {
+  initialQuotes: Quote[];
+}
+
+const ChatComponent = ({ initialQuotes }: ChatComponentProps) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { isDarkMode } = useTheme();
@@ -89,6 +101,16 @@ const ChatComponent = () => {
             </div>
           </Flex>
         ))}
+        {messages.length === 0 && (
+          <Flex
+            vertical
+            justify="center"
+            align="center"
+            style={{ height: "100%" }}
+          >
+            <ChatPlaceholderComponent initialQuotes={initialQuotes} />
+          </Flex>
+        )}
       </Flex>
 
       <Flex

@@ -1,10 +1,10 @@
 import { httpClient } from "@/src/utils/httpClient.util";
 
 interface Quote {
-	q: string; // quote text
-	a: string; // author
-	c: string; // citation number
-	h: string; // HTML format
+	q: string;
+	a: string;
+	c: string;
+	h: string;
 }
 
 export const fetchQuotesAction = async (): Promise<Quote[]> => {
